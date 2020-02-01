@@ -1,0 +1,45 @@
+version: '3'
+services:
+    django:
+        restart: always
+        build: ./django
+        expose:
+            - "3031"
+        depends_on:
+            - mariadb
+        volumes:
+            - "staticdata:/opt/static/"
+            - "./django:/opt/code/"
+        entrypoint: ./wait-for-mariadb.sh mariadb 
+
+    
+    nginx:
+        image: nginx
+        restart: always
+        depends_on: 
+            - django
+        ports:
+            - "80:80"
+        volumes:
+            - "./nginx/:/etc/nginx"
+            - "staticdata:/opt/code/static"
+
+    mariadb:
+        image: mariadb
+        restart: always
+        ports:
+            - 3306:3306
+        volumes:
+            - "dbdata:/var/lib/mariadb/data"
+        env_file:
+            - ./django/mariadb.env
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+
+volumes:
+    dbdata:
+    staticdata:
