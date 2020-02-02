@@ -13,6 +13,6 @@ until mysql --host="$host" --user="$MYSQL_USER" --password="$MYSQL_PASSWORD" -e 
 done
 
 >&2 echo "MariaDB is up -executing command"
-python manage.py migrate && gunicorn coffearch.wsgi -b 0.0.0.0:3031
+gunicorn coffearch.wsgi -b 0.0.0.0:3031
 
 exec $cmd
