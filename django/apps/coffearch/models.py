@@ -15,3 +15,14 @@ class Region(models.Model):
 
     def __str__(self):
         return self.name
+
+class Coffee(models.Model):
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    alias = models.CharField(max_length=255, null=True)
+    body = models.FloatField()
+    acidity = models.FloatField()
+    bitterness = models.FloatField()
+
+class CoffeeFlavor(models.Model):
+    coffee = models.ForeignKey(Coffee, on_delete=models.CASCADE)
+    flavor = models.CharField(max_length=255)
