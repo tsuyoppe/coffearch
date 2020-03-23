@@ -8,11 +8,10 @@ services:
         depends_on:
             - mariadb
         volumes:
-            - "staticdata:/opt/static/"
-            - "./django:/opt/code/"
+            - staticdata:/opt/static/
+            - ./django:/opt/code/
         entrypoint: ./wait-for-mariadb.sh mariadb "gunicorn coffearch.wsgi -b 0.0.0.0:3031"
 
-    
     nginx:
         image: nginx
         restart: always
@@ -21,8 +20,8 @@ services:
         ports:
             - "80:80"
         volumes:
-            - "./nginx/:/etc/nginx"
-            - "staticdata:/opt/code/static"
+            - ./nginx/:/etc/nginx
+            - staticdata:/opt/code/static
 
     mariadb:
         image: mariadb
@@ -30,7 +29,7 @@ services:
         ports:
             - 3306:3306
         volumes:
-            - "dbdata:/var/lib/mariadb/data"
+            - dbdata:/var/lib/mysql
         env_file:
             - ./django/mariadb.env
 
